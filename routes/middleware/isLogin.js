@@ -12,17 +12,13 @@ const isValid = (token) => {
 module.exports = async (req, res, next) => {
     try {
         const accessToken = req.cookies.accessToken;
+        req.app.locals.isLogin = false;
         if(accessToken){
             const [authType, authToken] = (accessToken).split(" ");
             if(isValid(authToken)){
                 req.app.locals.isLogin = true;
-            } else {
-                req.app.locals.isLogin = false;
             }
-        } else {
-            req.app.locals.isLogin = false;
         }
-        
         next();
     } catch (error) {
         res.status(401).send({

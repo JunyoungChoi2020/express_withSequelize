@@ -5,14 +5,14 @@ const auth = require("../routes/middleware/auth");
 router.post('/', auth, async (req,res)=>{
     const userInfo = req.app.locals.user;
     try {
-        const { title, content, like } = req.body;
+        const { title, content } = req.body;
         const userId = userInfo.userId;
 
         await Posts.create({
             userId: userId,
             title: title,
             content: content,
-            like: like,
+            like: 0,
         });
 
         res.status(200).json({message: "게시글 작성에 성공했습니다."});
@@ -82,7 +82,8 @@ router.get('/:postId', auth, async(req,res)=>{
     try {
         const postId = req.params.postId;
         const thisPost = await Posts.findOne({
-            where : {postId : postId}
+            where : {postId : postId},
+            include: [Likes]
         });
         res.status(200).json({result: thisPost});
     } catch (error) {

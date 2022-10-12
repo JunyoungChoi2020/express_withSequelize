@@ -2,9 +2,9 @@ const jwt = require('jsonwebtoken');
 const { Users } = require('../models/');
 const singUpValidation = require('./middleware/signup_validation');
 const router = require('express').Router();
-const auth = require("../routes/middleware/auth");
+const isLogin = require("../routes/middleware/isLogin");
 
-router.post('/signup', singUpValidation, auth, async (req, res) => {
+router.post('/signup', singUpValidation, isLogin, async (req, res) => {
     try {
         if(req.app.locals.isLogin){
             res.status(401).send("이미 로그인 중입니다.");
@@ -28,7 +28,7 @@ router.post('/signup', singUpValidation, auth, async (req, res) => {
     }
 });
 
-router.post('/login', auth, async(req, res) => {
+router.post('/login', isLogin, async(req, res) => {
     try {
         if(req.app.locals.isLogin){
             res.status(401).send("이미 로그인 중입니다.");
