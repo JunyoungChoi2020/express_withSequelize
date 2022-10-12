@@ -57,9 +57,7 @@ router.post('/login', async(req, res) => {
                 }
                 
                 const token = "Bearer " + jwt.sign({userId: user.userId}, "SecretKey", {expiresIn: '600s'});
-                res.cookie('accessToken', token);
-    
-                res.send({
+                res.cookie('accessToken', token).send({
                     msg: "로그인에 성공했습니다.",
                     token: token
                 });
@@ -72,7 +70,8 @@ router.post('/login', async(req, res) => {
 });
 
 router.get('/', async (req, res) => {
+    
     const userInfo = await Users.findAll();
-    res.json({"result": userInfo})
+    res.json({"result": (req.cookies.accessToken.split(" ")[1])})
 })
 module.exports = router;
