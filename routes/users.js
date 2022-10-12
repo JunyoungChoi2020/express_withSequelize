@@ -6,9 +6,8 @@ const auth = require("../routes/middleware/auth");
 
 router.post('/signup', singUpValidation, auth, async (req, res) => {
     try {
-        const userInfo = req.app.locals.user;
-        if(userInfo){
-            res.status(401).send("이미 로그인한 상태입니다.")
+        if(req.app.locals.isLogin){
+            res.status(401).send("이미 로그인 중입니다.");
         }
         const { nickname, password, confirm } = req.body;
         const nicknameInDB = await Users.findOne({where: {nickname: nickname}});
@@ -31,9 +30,8 @@ router.post('/signup', singUpValidation, auth, async (req, res) => {
 
 router.post('/login', auth, async(req, res) => {
     try {
-        const userInfo = req.app.locals.user;
-        if(userInfo){
-            res.status(401).send("이미 로그인한 상태입니다.")
+        if(req.app.locals.isLogin){
+            res.status(401).send("이미 로그인 중입니다.");
         }
         const { nickname, password } = req.body;
 
