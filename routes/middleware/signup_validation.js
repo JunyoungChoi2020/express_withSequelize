@@ -5,7 +5,7 @@ module.exports = async (req, res, next) => {
     const schema = Joi.object().keys({
         nickname: Joi.string().min(3).alphanum().required(),
         password: Joi.string().min(4).required(),
-        confirmPassword: Joi.string().min(4).required(),
+        confirm: Joi.string().min(4).required(),
     });
 
     try{
