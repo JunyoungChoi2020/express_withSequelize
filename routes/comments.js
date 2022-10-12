@@ -46,22 +46,15 @@ router.get('/:postId', async (req,res)=>{
     
 })
 
-router.get('/:commentId', auth, async (req,res)=>{
-    try {
-        const commentId = req.params.commentId;
-        const thisComment = await Comments.findOne({
-            where : {commentId : commentId}
-        });
-        res.status(200).json({result: thisComment});
-    } catch (error) {
-        res.status(400).json({ errorMessage: error });
-    }
-})
-
 router.put('/:commentId', auth, async (req,res)=>{
     try {
         const commentId = req.params.commentId;
         const { comment } = req.body;
+
+        const myComment = await Comments.findOne({where : {commentId: commentId}});
+        if(!myComment){
+            res.status(401).send("코멘트가 존재하지 않습니다.");
+        }
 
         await Comments.update(
             {comment: comment},
@@ -76,6 +69,11 @@ router.put('/:commentId', auth, async (req,res)=>{
 router.delete('/:commentId', auth, async (req,res)=>{
     try {
         const commentId = req.params.commentId;
+        const myComment = await Comments.findOne({where : {commentId: commentId}});
+        if(!myComment){
+            res.status(401).send("코멘트가 존재하지 않습니다.");
+        }
+        
         await Comments.destroy({where : {commentId: commentId}});
         res.status(200).json({message: "게시글이 삭제되었습니다."});
     } catch (error) {
