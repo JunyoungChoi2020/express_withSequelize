@@ -18,7 +18,7 @@ router.post('/signup', singUpValidation, async (req, res) => {
     if(isValid(req.cookies.accessToken.split(" ")[1])){
         res.status(400).send("이미 로그인이 되어있습니다.")
     }else {
-        try {
+        // try {
             const { nickname, password, confirm } = req.body;
             const nicknameInDB = await Users.findOne({where: {nickname: nickname}});
     
@@ -33,9 +33,9 @@ router.post('/signup', singUpValidation, async (req, res) => {
             } else {
                 res.send("중복된 닉네임입니다.")
             }
-        } catch (error) {
-            res.status(400).json({ errorMessage: error });
-        }
+        // } catch (error) {
+        //     res.status(400).json({ errorMessage: error });
+        // }
     }
     
 });
